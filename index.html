@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Laundry</title>
+<meta charset="utf-8">
+<meta name="theme-color" content="#0c0c0b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@300;400&display=swap">
+<style>
+:root{
+  --ground:#0c0c0b;--field:#181817;--ink:#f1eee6;--ink-2:#b9b5aa;--ink-3:#8a867c;--ink-4:#5f5c55;
+  --rule:rgba(241,238,230,.08);--rule-2:rgba(241,238,230,.10);
+  --info:#ee5a2a;--teosto:#3b78e7;--gramex:#3fae74;--mat:#e7c33f;--ok:#7fd8a4;--err:#ff7a5c;
+  --c:var(--info);
+  --ui:"Schibsted Grotesk",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --num:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;font-size:1rem}
+@supports (font:-apple-system-body){html{font:-apple-system-body}}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);font-size:0.9412rem;line-height:1.45}
+[hidden]{display:none!important}
+body{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.cta{padding-left:max(20px,env(safe-area-inset-left,0px))!important;padding-right:max(20px,env(safe-area-inset-right,0px))!important}
+button{font:inherit;color:inherit}
+a{color:var(--ink)}
+.mono{font-family:var(--num)}
+.wrap{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;position:relative;padding-bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+.wrap.nocta{padding-bottom:48px}
+
+/* home */
+.hd{padding:calc(16px + env(safe-area-inset-top,0px)) 20px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{height:32px;width:auto;display:block}
+.logo.s{height:26px}
+.who{font-size:0.7647rem;color:var(--ink-3)}
+.page{padding:12px 20px 0;display:flex;flex-direction:column;gap:32px}
+.ttl{display:flex;flex-direction:column;gap:4px}
+.ttl .d{font-size:0.8824rem;font-weight:500;color:var(--ink-2)}
+h1{margin:0;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto;font-size:1.6471rem;font-weight:700;letter-spacing:-.015em;line-height:1.15}
+h2{margin:0;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto;font-size:1.6471rem;font-weight:700;letter-spacing:-.015em;line-height:1.15}
+.sub{font-size:0.8824rem;color:var(--ink-3);margin:0}
+.plot{width:100%;max-width:480px;height:auto;display:block}
+.plot.anim path.on{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.4s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.plot.anim path.on{animation:none;stroke-dashoffset:0}}
+.meta{display:flex;justify-content:space-between;font-size:0.7647rem;color:var(--ink-3);gap:12px}
+.meta b{font-weight:600;color:var(--ink)}
+.lead{margin:0;font-size:0.8824rem;color:var(--ink-2);max-width:34ch}
+.cap{display:flex;justify-content:space-between;font-size:0.7647rem;color:var(--ink-3);padding-bottom:6px}
+.list{border-top:1px solid var(--rule)}
+.row{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:14px;padding:18px 0;border-bottom:1px solid var(--rule);color:var(--ink);cursor:pointer;text-decoration:none}
+.row:focus-visible,.grow:focus-visible,.item:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+.t{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.t b{font-size:0.9412rem;font-weight:600}
+.t span{font-size:0.7647rem;color:var(--ink-3)}
+.dot{width:18px;height:18px;border-radius:50%;box-sizing:border-box;flex:none;display:grid;place-items:center}
+.chev{width:16px;height:16px;flex:none;stroke:var(--ink-4)}
+.seg3{display:flex;gap:3px;height:3px}
+.seg3 span{flex:1;border-radius:2px;background:var(--field)}
+.big{display:flex;align-items:baseline;justify-content:space-between}
+.big .p{font-family:var(--num);font-size:2.5882rem;font-weight:300;line-height:1}
+.big .n{font-size:0.8235rem;color:var(--ink-3)}
+.next{display:flex;align-items:center;gap:10px;font-size:0.8235rem;color:var(--ink-2);padding-top:4px}
+.next b{color:var(--ink);font-weight:600}
+.grow{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:16px 0;cursor:pointer}
+.gname{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0}
+.gname>span:first-child{font-size:0.9412rem;font-weight:600}
+.gbar{display:block;height:2px;background:var(--field)}
+.gbar i{display:block;height:2px}
+.gcount{font-family:var(--num);font-size:0.7647rem;color:var(--ink-3);min-width:38px;text-align:right;white-space:nowrap}
+.items{padding:0 0 12px 20px}
+.item{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:10px 0;min-height:44px;cursor:pointer;font-size:0.8824rem;color:var(--ink-2)}
+.item>span:nth-child(2){min-width:0;overflow-wrap:anywhere}
+.item .due{white-space:nowrap}
+.item.done{color:var(--ink)}
+.item .due{font-family:var(--num);font-size:0.7059rem;color:var(--ink-3)}
+.box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--ink-4);display:grid;place-items:center;flex:none}
+.box.on{background:var(--ink);border-color:var(--ink)}
+.box.auto{border-radius:50%}
+.cal{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:var(--field);cursor:pointer;color:var(--ink);text-decoration:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;animation:fade .2s ease}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;max-width:520px;margin:0 auto;background:#161615;border-radius:18px 18px 0 0;padding:10px 20px calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:4px;animation:up .28s cubic-bezier(.22,1,.36,1);max-height:90vh;overflow:auto}
+.sheet h3{margin:6px 0 4px;font-size:1.2941rem;font-weight:700;letter-spacing:-.01em}
+.grab{width:36px;height:5px;border-radius:3px;background:#3a3936;margin:0 auto 6px}
+.opt{display:flex;align-items:center;gap:14px;min-height:60px;padding:8px 0;border-bottom:1px solid var(--rule);color:var(--ink);text-decoration:none}
+.opt:focus-visible,.cancel:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:8px}
+.ico{width:32px;height:32px;border-radius:8px;flex:none;display:grid;place-items:center;background:#f1eee6}
+.ico-apple{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='0' y='0' width='32' height='9' fill='%23ff3b30'/%3E%3Ctext x='16' y='26' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%23111'%3E20%3C/text%3E%3C/svg%3E") center/100% no-repeat}
+.ico-google{background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='5' y='5' width='22' height='22' rx='3' fill='none' stroke='%234285f4' stroke-width='3'/%3E%3Crect x='5' y='5' width='22' height='6' fill='%234285f4'/%3E%3Ctext x='16' y='24' font-family='Arial' font-weight='700' font-size='10' text-anchor='middle' fill='%234285f4'%3E31%3C/text%3E%3C/svg%3E") center/100% no-repeat}
+.ico-outlook{background:#0f6cbd url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='6.5' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E") center/100% no-repeat}
+.cancel{all:unset;box-sizing:border-box;width:100%;min-height:50px;margin-top:8px;border-radius:12px;background:var(--field);text-align:center;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes fade{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){.sheet,.scrim{animation:none}}
+.cal .t b{font-size:0.8824rem}
+
+/* bottom CTA */
+.cta{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(16px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--ground) 70%,rgba(12,12,11,0));z-index:5}
+.cta.line{background:var(--ground);border-top:1px solid var(--rule)}
+.cta button{all:unset;box-sizing:border-box;max-width:480px;margin:0 auto;width:100%;height:52px;border-radius:12px;background:var(--ink);color:var(--ground);font-size:0.9412rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.cta button:focus-visible{outline:2px solid var(--c);outline-offset:3px}
+
+/* forms */
+.fbar{position:sticky;top:0;z-index:6;background:rgba(12,12,11,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding-top:env(safe-area-inset-top,0px)}
+.fhd{padding:16px 20px 12px;display:flex;align-items:center;gap:12px}
+.back{all:unset;width:44px;height:44px;margin-left:-4px;border-radius:10px;background:var(--field);display:grid;place-items:center;cursor:pointer;flex:none}
+.back:focus-visible{outline:2px solid var(--ink)}
+.st{flex:1;font-size:0.7647rem;color:var(--ink-3)}
+.st.err{color:var(--err)}
+.in[type=date]{min-height:47px;-webkit-appearance:none;appearance:none;text-align:left}
+.pl{height:2px;background:var(--field);margin:0 20px}
+.pl i{display:block;height:2px;background:var(--c);transition:width .4s}
+.form{padding:24px 20px 0;display:flex;flex-direction:column;gap:30px}
+.f{display:flex;flex-direction:column;gap:6px;min-width:0}
+.l{font-size:0.7647rem;font-weight:500;color:var(--ink-3);display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px}
+.l i{font-style:normal;color:var(--ink-3)}
+.in,.sel{font:inherit;font-size:1rem;color:var(--ink);background:var(--field);border:1px solid var(--rule-2);border-radius:10px;padding:11px 12px;min-width:0;width:100%;outline:none;caret-color:var(--c)}
+.in::placeholder{color:var(--ink-3);opacity:.85}
+.in:focus,.sel:focus{border-color:var(--c)}
+.num{font-family:var(--num);font-size:1rem}
+.sel{appearance:none;-webkit-appearance:none;padding-right:32px;background:var(--field) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5l3 3 3-3' fill='none' stroke='%238a867c' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center}
+.grp{display:flex;flex-direction:column;gap:14px}
+.gt{font-size:0.7059rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:0}
+.g2,.gd,.gs,.gb{display:flex;flex-wrap:wrap;gap:10px}
+.g2>*{flex:1 1 9rem}
+.gd>:first-child{flex:999 1 11rem}.gd>:last-child{flex:1 1 7rem}
+.gs>:first-child{flex:999 1 10rem}.gs>:last-child{flex:1 1 5rem}
+.gb>:first-child{flex:1 1 8.5rem}.gb>:last-child{flex:999 1 11rem}
+.help{display:flex;gap:12px;align-items:flex-start;background:var(--field);border-radius:12px;padding:12px 14px;font-size:0.8235rem;color:var(--ink-2);line-height:1.45}
+.help b{color:var(--ink);font-weight:600}
+.help svg{flex:none;margin-top:2px}
+.lnk{all:unset;font-size:0.8235rem;font-weight:500;color:var(--ink-2);cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:0;min-height:44px}
+.lnk:focus-visible{outline:2px solid var(--ink);border-radius:4px}
+.lnk.ok{color:var(--ok)}
+.prow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.prow>:nth-child(1){flex:999 1 10rem}.prow>:nth-child(2){flex:1 1 6rem}.prow>:nth-child(3){flex:0 0 44px}
+.x{all:unset;width:44px;height:44px;display:grid;place-items:center;cursor:pointer;flex:none}
+.x:focus-visible{outline:2px solid var(--ink);border-radius:6px}
+.seg{display:flex;background:var(--field);border:1px solid var(--rule-2);border-radius:10px;padding:3px;gap:3px}
+.sb{all:unset;flex:1;text-align:center;font-size:0.8235rem;font-weight:500;color:var(--ink-2);padding:0;min-height:38px;display:flex;align-items:center;justify-content:center;border-radius:7px;cursor:pointer}
+.sb.on{background:var(--ink);color:var(--ground);font-weight:600}
+.sb:focus-visible{outline:2px solid var(--c)}
+.q{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.q>span{font-size:0.8824rem}
+.q .seg{width:132px;max-width:100%;flex:none}
+.tot{display:flex;justify-content:space-between;align-items:baseline}
+.tot .mono{font-size:1.2941rem;font-weight:300}
+.bars{display:flex;gap:2px;height:4px;border-radius:2px;background:var(--field);overflow:hidden}
+.bars span{display:block;height:4px}
+.acc{border-bottom:1px solid var(--rule)}
+.ahd{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:16px 0;cursor:pointer}
+.ahd:focus-visible{outline:2px solid var(--ink);border-radius:6px}
+.ahd .t b{font-size:0.9412rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abody{display:flex;flex-direction:column;gap:16px;padding:0 0 20px}
+.abody.ind{padding-left:20px}
+.add{all:unset;padding:16px 0;display:flex;align-items:center;gap:12px;font-size:0.8824rem;font-weight:500;color:var(--ink-2);cursor:pointer}
+.add:focus-visible{outline:2px solid var(--ink);border-radius:6px}
+.in.miss{border-color:rgba(238,90,42,.6)}
+.mi{display:none;font-style:normal;color:#ee5a2a!important}
+.f:has(.in.miss) .mi{display:inline}
+.f:has(.in.miss) .hi{display:none}
+.hint{font-size:0.7059rem;color:var(--ink-3);margin-top:-8px}
+.warn{font-size:0.7647rem;color:var(--mat);margin-top:-8px}
+.sums{display:flex;gap:18px;font-family:var(--num);font-size:0.8235rem;color:var(--ink-2)}
+.sums b{font-weight:400;color:var(--ink)}
+.rrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.dl{display:inline-flex;align-items:center;gap:6px;font-size:0.8235rem;font-weight:600;color:var(--ground);background:var(--ink);border-radius:999px;padding:8px 14px;text-decoration:none;flex:none}
+.soon{font-size:0.7647rem;color:var(--ink-3);flex:none}
+.err{color:var(--err)}
+
+/* status screens */
+.center{min-height:80vh;display:grid;place-items:center;text-align:center;padding:40px 24px;color:var(--ink-3)}
+.pulse{width:42px;height:2px;background:var(--ink-4);margin:16px auto 0;animation:pz 1.2s ease-in-out infinite}
+@keyframes pz{50%{opacity:.25;transform:scaleX(.5)}}
+</style>
+</head>
+<body>
+<div id="app"><div class="center"><div class="pulse"></div></div></div>
+
+<script>
+var APP_URL = 'https://script.google.com/macros/s/AKfycbznxPPBQOJ4rlL0a3NwxDmYcFAG-DpdUVX7SEtP9SBauSND9mCUPD3veawR1XZtEnc4vQ/exec';
+var TOKEN = (new URLSearchParams(location.search).get('r') || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 64);
+/* Talks to the Google Sheet backend with plain fetch (no Google sign-in involved). Same shape as GS.run. */
+var GS = { history: {
+  push: function (state, p, hash) { try { history.pushState(state, '', location.pathname + location.search + (hash ? '#' + hash : '')); } catch (e) {} },
+  replace: function (state) { try { history.replaceState(state, '', location.pathname + location.search); } catch (e) {} },
+  setChangeHandler: function (fn) { window.addEventListener('popstate', function (e) { fn({ state: e.state }); }); }
+} };
+function apiCall(fn, args) {
+  var req = fn === 'getRelease'
+    ? fetch(APP_URL + '?api=get&r=' + encodeURIComponent(args[0]), { credentials: 'omit' })
+    : fetch(APP_URL, { method: 'POST', credentials: 'omit', keepalive: true, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, token: args[0], args: args.slice(1) }) });
+  return req.then(function (r) { return r.json(); }).then(function (d) { if (!d || !d.ok) throw new Error((d && d.error) || 'error'); return d.result; });
+}
+Object.defineProperty(GS, 'run', { get: function () {
+  var ok = function () {}, bad = function () {}, o = {
+    withSuccessHandler: function (f) { ok = f; return o; },
+    withFailureHandler: function (f) { bad = f; return o; }
+  };
+  ['getRelease', 'saveCredits', 'saveTeosto', 'saveGramex', 'setTask'].forEach(function (n) {
+    o[n] = function () { apiCall(n, [].slice.call(arguments)).then(function (r) { ok(r); }, function (e) { bad(e); }); };
+  });
+  return o;
+} });
+var LOGO = 'data:image/png;base64,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';
+var COL = { info: '#ee5a2a', teosto: '#3b78e7', gramex: '#3fae74', mat: '#e7c33f' };
+var ROLE_NAME = { artist: 'Artisti', producer: 'Tuottaja', label: 'Levy-yhtiö' };
+var GROUP_COL = { 'Artistin ja tuottajan tiedot': '#3fae74', 'Materiaalit': '#e7c33f', 'Toimitus ja julkaisu': '#3b78e7', 'Markkinointi': '#ee5a2a', 'Julkaisun jälkeen': '#8a867c' };
+var FORMS = [
+  { id: 'tekijat', name: 'Tekijätiedot', c: COL.info },
+  { id: 'teosto', name: 'Teosto-osuudet', c: COL.teosto },
+  { id: 'gramex', name: 'Gramex-esittäjät', c: COL.gramex }
+];
+var TEOSTO_ROLES = ['Säveltäjä', 'Sanoittaja', 'Säveltäjä ja sanoittaja', 'Sovittaja', 'Kääntäjä'];
+
+var D = null;
+var UI = { touched: {}, reveal: {}, view: 'home', openT: 0, openG: 0, openGroup: 0, help: false, copiedT: '', copiedG: '', status: '' };
+
+/* ---------- helpers ---------- */
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function str(v) { return v == null ? '' : String(v); }
+function filled(v) { return str(v).trim() !== ''; }
+function num(v) { var n = parseFloat(str(v).replace(',', '.')); return isNaN(n) ? 0 : n; }
+function fmt(n) { return String(Math.round(n * 100) / 100).replace('.', ','); }
+function parseISO(s) { var m = str(s).match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+function fiDate(s, withYear) { var d = parseISO(s); return d ? d.getDate() + '.' + (d.getMonth() + 1) + '.' + (withYear ? d.getFullYear() : '') : ''; }
+function weekday(s) { var d = parseISO(s); return d ? ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'][d.getDay()] : ''; }
+function daysTo(s) { var d = parseISO(s); if (!d) return null; var t = new Date(); t = new Date(t.getFullYear(), t.getMonth(), t.getDate()); return Math.round((d - t) / 864e5); }
+function names(s) { return str(s).split(/,|&| ja /).map(function (x) { return x.trim(); }).filter(Boolean); }
+var I = {
+  chev: '<svg class="chev" viewBox="0 0 18 18" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3.5L12.5 9 7 14.5"/></svg>',
+  down: function (open) { return '<svg class="chev" viewBox="0 0 18 18" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + (open ? ' style="transform:rotate(180deg)"' : '') + '><path d="M4.5 7l4.5 4.5L13.5 7"/></svg>'; },
+  check: function (c) { return '<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="' + (c || '#0c0c0b') + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5l2.5 2.5 4.5-5.5"/></svg>'; },
+  arrow: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9h11M10 4.5L14.5 9 10 13.5"/></svg>',
+  back: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#f1eee6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 3.5L5.5 9 11 14.5"/></svg>',
+  x: '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8a867c" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7"/></svg>',
+  plus: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#b9b5aa" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="7.5" stroke="#5f5c55"/><path d="M9 5.5v7M5.5 9h7"/></svg>',
+  info: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#b9b5aa" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><path d="M8 7.2v4M8 4.8v.1"/></svg>',
+  dl: '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5v8M4.5 7L8 10.5 11.5 7M3 13h10"/></svg>',
+  mat: '<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="#b9b5aa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5v8M4.5 7L8 10.5 11.5 7M3 13h10"/></svg>',
+  cal: '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#f1eee6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="14" height="12.5" rx="2.5"/><path d="M3 8.5h14M7 2.5v4M13 2.5v4"/><path d="M10 11v4M8 13h4" stroke="#ee5a2a"/></svg>'
+};
+
+/* ---------- data in ---------- */
+function normalize(d) {
+  var c = d.credits || {};
+  ['artist', 'title', 'duration', 'lyricist', 'composer', 'arranger', 'recording', 'mix', 'master', 'ar', 'label'].forEach(function (k) { c[k] = str(c[k]); });
+  if (!c.artist) c.artist = str(d.release.artist);
+  if (!c.title) c.title = str(d.release.title);
+  d.credits = c;
+  d.players = (d.players || []).map(function (p) { return { name: str(p.name), instrument: str(p.instrument) }; });
+  if (!d.players.length) d.players = [{ name: '', instrument: '' }];
+  d.work = { freeParts: d.work && d.work.freeParts === 'Kyllä' ? 'Kyllä' : 'Ei', freePartsWhat: str(d.work && d.work.freePartsWhat) };
+  d.teosto = (d.teosto || []).map(function (p) {
+    return { name: str(p.name), share: str(p.share), role: TEOSTO_ROLES.indexOf(p.role) >= 0 ? p.role : 'Säveltäjä',
+      teostoClient: p.teostoClient === 'Ei' ? 'Ei' : 'Kyllä', teostoNumber: str(p.teostoNumber),
+      publisher: p.publisher === 'Kyllä' ? 'Kyllä' : 'Ei', publisherName: str(p.publisherName), publisherShare: str(p.publisherShare) };
+  });
+  if (!d.teosto.length) d.teosto = [newT()];
+  d.gramex = (d.gramex || []).map(function (p) {
+    var g = { name: str(p.name), parts: str(p.parts), conducted: str(p.conducted) || '4–9',
+      gramexClient: p.gramexClient === 'Ei' ? 'Ei' : 'Kyllä', gramexNumber: str(p.gramexNumber), birthDate: str(p.birthDate), email: str(p.email), roles: [] };
+    ['S', 'M', 'K'].forEach(function (k) { var n = parseInt(p[k], 10); if (n > 0) g.roles.push({ role: k, n: Math.min(6, n) }); });
+    if (!g.roles.length) g.roles.push({ role: 'M', n: 1 });
+    return g;
+  });
+  if (!d.gramex.length) d.gramex = [newG()];
+  d.tasks = (d.tasks || []).map(function (t) { return { group: str(t.group), task: str(t.task), due: str(t.due), done: t.done === true || t.done === 'TRUE' }; });
+  d.assets = (d.assets || []).map(function (a) { return { asset: str(a.asset), status: str(a.status), url: str(a.url), note: str(a.note) }; });
+  return d;
+}
+function newT() { return { name: '', share: '', role: 'Säveltäjä', teostoClient: 'Kyllä', teostoNumber: '', publisher: 'Ei', publisherName: '', publisherShare: '' }; }
+function newG() { return { name: '', parts: '', roles: [{ role: 'M', n: 1 }], conducted: '4–9', gramexClient: 'Kyllä', gramexNumber: '', birthDate: '', email: '' }; }
+
+/* ---------- completion ---------- */
+var REQ = ['artist', 'title', 'lyricist', 'composer', 'recording', 'mix', 'master'];
+function credState() {
+  var c = D.credits, miss = REQ.filter(function (k) { return !filled(c[k]); }).length;
+  var pl = D.players.some(function (p) { return filled(p.name) && filled(p.instrument); });
+  if (!pl) miss++;
+  var touched = ['lyricist', 'composer', 'recording', 'mix', 'master'].some(function (k) { return filled(c[k]); }) || D.players.some(function (p) { return filled(p.name); });
+  return { done: miss === 0, text: miss === 0 ? 'Valmis' : !touched ? 'Ei aloitettu' : miss + (miss === 1 ? ' kohta puuttuu' : ' kohtaa puuttuu') };
+}
+function tTotal() { return D.teosto.reduce(function (t, p) { return t + num(p.share); }, 0); }
+function tRowOk(p) { return filled(p.name) && num(p.share) > 0 && (p.teostoClient !== 'Kyllä' || filled(p.teostoNumber)) && (p.publisher !== 'Kyllä' || filled(p.publisherName)); }
+function teostoState() {
+  var total = Math.round(tTotal() * 100) / 100, left = Math.round((100 - total) * 100) / 100;
+  var started = D.teosto.some(function (p) { return filled(p.name); });
+  var rowsOk = D.teosto.every(tRowOk);
+  var done = started && left === 0 && rowsOk && (D.work.freeParts !== 'Kyllä' || filled(D.work.freePartsWhat));
+  return { done: done, total: total, left: left,
+    text: done ? 'Valmis' : !started ? 'Ei aloitettu' : left > 0 ? fmt(left) + ' % puuttuu' : left < 0 ? fmt(-left) + ' % liikaa' : 'Tietoja puuttuu' };
+}
+function gRowOk(p) { return filled(p.name) && filled(p.parts) && (p.gramexClient === 'Kyllä' ? filled(p.gramexNumber) : filled(p.birthDate) && filled(p.email)); }
+function gramexState() {
+  var started = D.gramex.some(function (p) { return filled(p.name); });
+  var bad = D.gramex.filter(function (p) { return !gRowOk(p); }).length;
+  var n = D.gramex.filter(function (p) { return filled(p.name); }).length;
+  return { done: started && bad === 0, text: !started ? 'Ei aloitettu' : bad === 0 ? 'Valmis · ' + n + ' esittäjää' : n + ' esittäjää · tietoja puuttuu' };
+}
+function formStates() { return { tekijat: credState(), teosto: teostoState(), gramex: gramexState() }; }
+
+/* ---------- pulse plot ---------- */
+var ANIM = true;
+function plot(flags) {
+  var n = Math.max(flags.length, 2), top = 54, bottom = 176, step = (bottom - top) / (n - 1), out = '', minY = 999;
+  for (var i = 0; i < n; i++) {
+    var y = top + i * step, h = 18 + ((i * 7) % 5) * 7, cx = 200 + ((i * 5) % 9) * 22;
+    minY = Math.min(minY, y - h);
+    var d = 'M0,' + y.toFixed(1) + ' L' + (cx - 70) + ',' + y.toFixed(1) + ' C' + (cx - 35) + ',' + y.toFixed(1) + ' ' + (cx - 20) + ',' + (y - h).toFixed(1) + ' ' + cx + ',' + (y - h).toFixed(1) +
+      ' C' + (cx + 20) + ',' + (y - h).toFixed(1) + ' ' + (cx + 35) + ',' + y.toFixed(1) + ' ' + (cx + 70) + ',' + y.toFixed(1) + ' L600,' + y.toFixed(1);
+    out += flags[i]
+      ? '<path class="on" style="animation-delay:' + (i * 50) + 'ms" d="' + d + '" fill="#0c0c0b" stroke="#f1eee6" stroke-width="1.5"/>'
+      : '<path d="' + d + '" fill="#0c0c0b" stroke="rgba(241,238,230,.26)" stroke-width="1"/>';
+  }
+  var cls = ANIM ? 'plot anim' : 'plot'; ANIM = false, y0 = Math.floor(minY - 4);
+  return '<svg class="' + cls + '" viewBox="0 ' + y0 + ' 600 ' + (182 - y0) + '" role="img" aria-label="Julkaisun eteneminen: ' + flags.filter(Boolean).length + ' / ' + flags.length + ' valmiina">' + out + '</svg>';
+}
+
+/* ---------- views: homes ---------- */
+function header() { return '<div class="hd"><img class="logo" src="' + LOGO + '" alt="Laundry"><span class="who">' + ROLE_NAME[D.role] + '</span></div>'; }
+function releaseLine(withDays) {
+  var d = parseISO(D.release.releaseDate); if (!d) return '';
+  var days = daysTo(D.release.releaseDate);
+  var wd = ['sunnuntaina', 'maanantaina', 'tiistaina', 'keskiviikkona', 'torstaina', 'perjantaina', 'lauantaina'][d.getDay()];
+  if (days < 0) return 'Julkaistu ' + fiDate(D.release.releaseDate, true);
+  if (days === 0) return 'Julkaisu tänään';
+  return 'Julkaisu ' + wd + ' ' + fiDate(D.release.releaseDate, true) + (withDays ? ' · ' + (days === 1 ? 'huomenna' : days + ' päivää') : '');
+}
+function titleBlock(dateLine) {
+  return '<div class="ttl"><span class="d">' + esc(dateLine) + '</span><h1>' + esc(D.credits.title || D.release.title) + '</h1><span class="sub">' + esc(D.credits.artist || D.release.artist) + '</span></div>';
+}
+function formRows(st) {
+  return FORMS.map(function (f) {
+    var s = st[f.id];
+    var dot = s.done ? '<span class="dot" style="background:' + f.c + '">' + I.check() + '</span>' : '<span class="dot" style="border:1.5px solid ' + f.c + '"></span>';
+    return '<button type="button" class="row" data-go="' + f.id + '">' + dot + '<span class="t"><b>' + f.name + '</b><span>' + esc(s.text) + '</span></span>' + I.chev + '</button>';
+  }).join('');
+}
+function nextForm(st) { for (var i = 0; i < FORMS.length; i++) if (!st[FORMS[i].id].done) return FORMS[i]; return null; }
+var CALS = [
+  { id: 'apple', name: 'iPhone-kalenteri', sub: 'Apple Kalenteri' },
+  { id: 'google', name: 'Google-kalenteri', sub: 'Android ja Gmail' },
+  { id: 'outlook', name: 'Outlook', sub: 'Outlook.com ja Microsoft 365' }
+];
+function calStore(v) { try { if (v === undefined) return localStorage.getItem('laundry-cal') || ''; localStorage.setItem('laundry-cal', v); } catch (e) { return ''; } }
+function calUrls() {
+  var feed = APP_URL + '?r=' + encodeURIComponent(TOKEN) + '&ics=1';
+  var webcal = feed.replace(/^https:/, 'webcal:');
+  var name = 'Laundry · ' + (D.credits.title || D.release.title);
+  return {
+    apple: webcal,
+    google: 'https://calendar.google.com/calendar/r?cid=' + encodeURIComponent(webcal),
+    outlook: 'https://outlook.live.com/calendar/0/addfromweb?url=' + encodeURIComponent(feed) + '&name=' + encodeURIComponent(name),
+    file: feed + '&dl=1'
+  };
+}
+function calOrder() {
+  var ua = navigator.userAgent || '', first = /iPhone|iPad|Macintosh/.test(ua) ? 'apple' : /Android/.test(ua) ? 'google' : '';
+  var saved = calStore();
+  first = saved || first;
+  return CALS.slice().sort(function (a, b) { return (b.id === first) - (a.id === first); });
+}
+function calRow() {
+  var saved = CALS.filter(function (c) { return c.id === calStore(); })[0];
+  var sub = saved ? 'Lisätty: ' + saved.name + ' · päivittyy automaattisesti' : 'Valitse kalenteri, päivät lisätään heti';
+  return '<button type="button" class="cal" data-act="cal">' + I.cal +
+    '<span class="t"><b>Lisää deadlinet kalenteriin</b><span>' + esc(sub) + '</span></span>' + I.chev + '</button>';
+}
+function calSheet() {
+  if (!UI.calOpen) return '';
+  var u = calUrls();
+  return '<div class="scrim" data-act="calClose"></div><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="calT">' +
+    '<span class="grab" aria-hidden="true"></span><h3 id="calT">Mihin kalenteriin?</h3>' +
+    '<p class="sub" style="margin:0 0 8px">Kaikki deadlinet ja julkaisupäivä lisätään kerralla. Jos aikataulu muuttuu, kalenteri päivittyy itsestään.</p>' +
+    calOrder().map(function (c) {
+      return '<a class="opt" href="' + esc(u[c.id]) + '" target="' + (c.id === 'apple' ? '_top' : '_blank') + '" rel="noopener" data-cal="' + c.id + '">' +
+        '<span class="ico ico-' + c.id + '" aria-hidden="true"></span><span class="t"><b>' + c.name + '</b><span>' + c.sub + '</span></span>' + I.chev + '</a>';
+    }).join('') +
+    '<a class="lnk" href="' + esc(u.file) + '" target="_top" data-cal="file" style="justify-content:center;width:100%;color:var(--ink-3)">Muu kalenteri: lataa tiedostona</a>' +
+    '<button type="button" class="cancel" data-act="calClose">Peruuta</button></div>';
+}
+function homeArtist() {
+  var st = formStates(), own = FORMS.map(function (f) { return st[f.id].done; });
+  var flags = own.concat(D.tasks.map(function (t) { return t.done; }));
+  var done = flags.filter(Boolean).length, days = daysTo(D.release.releaseDate);
+  var ready = D.assets.filter(function (a) { return a.status === 'valmis' && /^https:\/\//.test(a.url); }).length;
+  var nf = nextForm(st);
+  return header() + '<div class="page">' + titleBlock(releaseLine(false)) +
+    '<div style="display:flex;flex-direction:column;gap:14px">' + plot(flags) +
+    '<div class="meta"><span>' + (days == null ? '' : days > 0 ? 'Julkaisuun ' + days + ' päivää' : days === 0 ? 'Julkaisu tänään' : 'Julkaistu') + '</span><span><b>' + done + '</b> / ' + flags.length + ' vaihetta valmiina</span></div></div>' +
+    '<div><div class="cap"><span>Sinun tehtäväsi' + (D.release.artistDue ? ' · viimeistään ' + weekday(D.release.artistDue) + ' ' + fiDate(D.release.artistDue) : '') + '</span><span>' + own.filter(Boolean).length + ' / 3</span></div>' +
+    '<div class="list">' + formRows(st) +
+    '<button type="button" class="row" data-go="materiaalit">' + I.mat + '<span class="t"><b>Materiaalit</b><span>' + (ready ? ready + (ready === 1 ? ' tiedosto' : ' tiedostoa') + ' ladattavissa' : 'Tulossa') + '</span></span>' + I.chev + '</button></div></div>' +
+    calRow() + '</div>' +
+    cta(nf ? 'Jatka: ' + nf.name : 'Materiaalit', nf ? nf.id : 'materiaalit');
+}
+function homeProducer() {
+  var st = formStates(), own = FORMS.map(function (f) { return st[f.id].done; }), nf = nextForm(st);
+  return header() + '<div class="page">' + titleBlock(releaseLine(false)) + plot(own.concat(D.tasks.map(function (t) { return t.done; }))) +
+    '<p class="lead">Täytä äänitteen tekijä- ja esittäjätiedot. Ne tallentuvat suoraan levy-yhtiölle ja artistille.</p>' +
+    '<div style="display:flex;flex-direction:column;gap:10px"><div class="meta"><span>' + (D.release.artistDue ? 'Valmis viimeistään ' + weekday(D.release.artistDue) + ' ' + fiDate(D.release.artistDue) : '') + '</span><span style="color:var(--ink)">' + own.filter(Boolean).length + ' / 3</span></div>' +
+    '<div class="seg3">' + FORMS.map(function (f, i) { return '<span' + (own[i] ? ' style="background:' + f.c + '"' : '') + '></span>'; }).join('') + '</div></div>' +
+    '<div class="list">' + formRows(st) + '</div></div>' +
+    cta(nf ? 'Jatka: ' + nf.name : 'Tarkista tiedot', nf ? nf.id : 'tekijat');
+}
+function labelGroups() {
+  var st = formStates(), due = D.release.artistDue ? fiDate(D.release.artistDue) : '';
+  var groups = [{ name: 'Artistin ja tuottajan tiedot', auto: true, items: FORMS.map(function (f) { return { label: f.name, due: due, done: st[f.id].done, go: f.id }; }) }];
+  D.tasks.forEach(function (t, i) {
+    var g = groups.filter(function (x) { return x.name === t.group; })[0];
+    if (!g) { g = { name: t.group, items: [] }; groups.push(g); }
+    g.items.push({ label: t.task, due: t.due, done: t.done, idx: i });
+  });
+  return groups;
+}
+function homeLabel() {
+  var groups = labelGroups(), all = 0, done = 0, flags = [], next = 'kaikki valmiina';
+  groups.forEach(function (g) { g.items.forEach(function (it) { all++; if (it.done) done++; flags.push(it.done); }); });
+  for (var i = 0; i < groups.length && next === 'kaikki valmiina'; i++) {
+    var it = groups[i].items.filter(function (x) { return !x.done && x.due; })[0];
+    if (it) next = it.label + ' ' + it.due;
+  }
+  var days = daysTo(D.release.releaseDate);
+  var ready = D.assets.filter(function (a) { return a.status === 'valmis'; }).length;
+  var html = header() + '<div class="page">' + titleBlock(releaseLine(true)) + plot(flags) +
+    '<div style="display:flex;flex-direction:column;gap:12px"><div class="big"><span class="p">' + Math.round(done / Math.max(all, 1) * 100) + ' %</span><span class="n">' + done + ' / ' + all + ' valmiina</span></div>' +
+    '<div class="seg3">' + groups.map(function (g) {
+      var c = GROUP_COL[g.name] || '#8a867c', d = g.items.filter(function (x) { return x.done; }).length / g.items.length * 100;
+      return '<span style="flex:' + g.items.length + ';background:linear-gradient(90deg,' + c + ' ' + d + '%,#181817 ' + d + '%)"></span>';
+    }).join('') + '</div>' +
+    '<div class="next"><span style="width:6px;height:6px;border-radius:50%;background:var(--info)"></span><span>Seuraava: <b>' + esc(next) + '</b></span></div></div>' +
+    '<div><div class="cap"><span>Tehtävät</span></div><div class="list">';
+  groups.forEach(function (g, gi) {
+    var c = GROUP_COL[g.name] || '#8a867c', d = g.items.filter(function (x) { return x.done; }).length, open = UI.openGroup === gi;
+    html += '<div class="acc"><button type="button" class="grow" data-group="' + gi + '" aria-expanded="' + open + '"><span style="width:8px;height:8px;border-radius:50%;background:' + c + ';flex:none"></span>' +
+      '<span class="gname"><span>' + esc(g.name) + '</span><span class="gbar"><i style="width:' + (d / g.items.length * 100) + '%;background:' + c + '"></i></span></span>' +
+      '<span class="gcount">' + d + '/' + g.items.length + '</span>' + I.down(open) + '</button>';
+    if (open) {
+      html += '<div class="items">' + g.items.map(function (it) {
+        var attr = g.auto ? 'data-go="' + it.go + '"' : 'data-tick="' + it.idx + '" role="checkbox" aria-checked="' + it.done + '"';
+        return '<button type="button" class="item' + (it.done ? ' done' : '') + '" ' + attr + '><span class="box' + (it.done ? ' on' : '') + (g.auto ? ' auto' : '') + '">' + (it.done ? I.check() : '') + '</span>' +
+          '<span style="flex:1">' + esc(it.label) + '</span><span class="due">' + esc(it.due) + '</span>' + (g.auto ? I.chev : '') + '</button>';
+      }).join('') + '</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div></div><div class="list" style="margin-top:-8px"><button type="button" class="row" data-go="materiaalit">' + I.mat + '<span class="t"><b>Materiaalit</b><span>' + ready + ' / ' + D.assets.length + ' valmiina · muokkaa Sheetissä</span></span>' + I.chev + '</button></div></div>';
+  return html;
+}
+function cta(label, go) { return '<div class="cta"><button type="button" data-go="' + go + '">' + esc(label) + I.arrow + '</button></div>'; }
+
+/* ---------- views: forms ---------- */
+function formTop(i, c) {
+  return '<div class="fbar"><div class="fhd"><button type="button" class="back" data-go="home" aria-label="Takaisin">' + I.back + '</button>' +
+    '<span class="st" id="st">' + (i ? i + ' / 3 · ' : '') + '<span data-live="status">' + esc(UI.status || 'Tallentuu automaattisesti') + '</span></span></div>' +
+    (i ? '<div class="pl"><i style="width:' + Math.round(i / 3 * 100) + '%;background:' + c + '"></i></div>' : '') + '</div>';
+}
+function isReq(path) {
+  var p = path.split('.');
+  if (p[0] === 'credits') return REQ.indexOf(p[1]) >= 0;
+  if (p[0] === 'players') { var r = D.players[+p[1]]; return +p[1] === 0 || (r && (filled(r.name) || filled(r.instrument))); }
+  if (p[0] === 'teosto') return ['name', 'share', 'teostoNumber', 'publisherName'].indexOf(p[2]) >= 0;
+  if (p[0] === 'gramex') return ['name', 'parts', 'gramexNumber', 'birthDate', 'email'].indexOf(p[2]) >= 0;
+  return path === 'work.freePartsWhat';
+}
+function secOf(path) { var h = path.split('.')[0]; return h === 'credits' || h === 'players' ? 'tekijat' : h === 'work' ? 'teosto' : h; }
+function isMissing(path, val) { return isReq(path) && !filled(val) && !!(UI.touched[path] || UI.reveal[secOf(path)]); }
+function input(path, val, o) {
+  o = o || {};
+  var miss = isMissing(path, val);
+  return '<input class="in' + (o.num ? ' num' : '') + (miss ? ' miss' : '') + '"' + (miss ? ' aria-invalid="true"' : '') + ' type="' + (o.type || 'text') + '" data-f="' + path + '" value="' + esc(val) + '"' +
+    (o.ph ? ' placeholder="' + esc(o.ph) + '"' : '') + (o.mode ? ' inputmode="' + o.mode + '"' : '') + (o.label ? ' aria-label="' + esc(o.label) + '"' : '') +
+    (o.style ? ' style="' + o.style + '"' : '') + ' autocomplete="off" autocapitalize="' + (o.caps || 'words') + '" spellcheck="false">';
+}
+function field(label, hint, inner) { return '<label class="f"><span class="l"><span>' + label + '</span>' + (hint ? '<i class="hi">' + hint + '</i>' : '') + '<i class="mi">puuttuu</i></span>' + inner + '</label>'; }
+function seg(path, val) {
+  return '<div class="seg" role="radiogroup">' + ['Kyllä', 'Ei'].map(function (v) {
+    return '<button type="button" class="sb' + (val === v ? ' on' : '') + '" role="radio" aria-checked="' + (val === v) + '" data-set="' + path + '" data-v="' + v + '">' + v + '</button>';
+  }).join('') + '</div>';
+}
+function select(path, val, opts, style) {
+  return '<select class="sel' + (style === 'num' ? ' num' : '') + '" data-sel="' + path + '"' + (style && style !== 'num' ? ' style="' + style + '"' : style === 'num' ? ' style="width:84px;flex:none"' : '') + '>' +
+    opts.map(function (o) { var v = typeof o === 'object' ? o[0] : o, t = typeof o === 'object' ? o[1] : o; return '<option value="' + esc(v) + '"' + (String(val) === String(v) ? ' selected' : '') + '>' + esc(t) + '</option>'; }).join('') + '</select>';
+}
+var PH = 'Etunimi Sukunimi';
+
+function viewTekijat() {
+  var c = D.credits;
+  var players = D.players.map(function (p, i) {
+    return '<div class="prow">' + input('players.' + i + '.name', p.name, { ph: PH, label: 'Soittajan nimi' }) + input('players.' + i + '.instrument', p.instrument, { ph: 'Soitin', label: 'Soitin', caps: 'none' }) +
+      (D.players.length > 1 ? '<button type="button" class="x" data-del="players.' + i + '" aria-label="Poista soittaja">' + I.x + '</button>' : '<span></span>') + '</div>';
+  }).join('');
+  return formTop(1, COL.info) + '<div class="form">' +
+    '<div class="ttl" style="gap:6px"><h2>Tekijätiedot</h2><p class="sub">Kaikki, jotka tekivät kappaletta. Nämä näkyvät krediitteinä palveluissa.</p></div>' +
+    '<div class="help">' + I.info + '<span>Käytä aina <b>koko nimeä</b>, esim. Mikael Laurent, ei Mikke. Useampi henkilö: erota pilkulla.</span></div>' +
+    '<div class="grp"><p class="gt">Kappale</p>' + field('Artisti', '', input('credits.artist', c.artist)) +
+    '<div class="gd">' + field('Kappaleen nimi', '', input('credits.title', c.title, { caps: 'sentences' })) + field('Kesto', 'valinnainen', input('credits.duration', c.duration, { num: true, ph: '3:12', mode: 'numeric' })) + '</div></div>' +
+    '<div class="grp"><p class="gt">Kirjoittajat</p>' +
+    field('San.', 'sanoittaja', input('credits.lyricist', c.lyricist, { ph: PH })) +
+    field('Säv.', 'säveltäjä', input('credits.composer', c.composer, { ph: PH })) +
+    field('Sov.', 'sovittaja · valinnainen', input('credits.arranger', c.arranger, { ph: PH })) +
+    '<button type="button" class="lnk' + (UI.copiedT ? ' ok' : '') + '" data-act="copyT">' + (UI.copiedT ? I.check('#7fd8a4') + esc(UI.copiedT) : I.arrow + 'Kopioi kirjoittajat Teosto-osuuksiin') + '</button></div>' +
+    '<div class="grp"><p class="gt">Äänitys ja soittajat</p>' + field('Äänitys', '', input('credits.recording', c.recording, { ph: PH })) +
+    '<div class="f"><span class="l"><span>Soittajat</span><i>koko nimi ja soitin</i></span>' + players +
+    '<button type="button" class="lnk" data-act="addPlayer">+ Lisää soittaja</button>' +
+    '<button type="button" class="lnk' + (UI.copiedG ? ' ok' : '') + '" data-act="copyG">' + (UI.copiedG ? I.check('#7fd8a4') + esc(UI.copiedG) : I.arrow + 'Kopioi soittajat Gramex-esittäjiin') + '</button></div></div>' +
+    '<div class="grp"><p class="gt">Viimeistely</p><div class="g2">' + field('Mix', '', input('credits.mix', c.mix, { ph: PH })) + field('Master', '', input('credits.master', c.master, { ph: PH })) + '</div></div>' +
+    '<div class="grp"><p class="gt">Levy-yhtiö</p><div class="g2">' + field('A&amp;R', 'valinnainen', input('credits.ar', c.ar, { ph: PH })) + field('Label', '', input('credits.label', c.label)) + '</div></div>' +
+    '</div>' + ctaLine('Seuraava: Teosto', 'teosto');
+}
+function ctaLine(label, go) { return '<div class="cta line"><button type="button" data-go="' + go + '">' + esc(label) + I.arrow + '</button></div>'; }
+
+var TCOL = ['#3b78e7', '#7ba3f0', '#2f5fb8', '#a9c2f5', '#5a8ff0', '#1f4a99'];
+function teostoLive() {
+  var s = teostoState();
+  return {
+    total: fmt(s.total) + ' %',
+    tstatus: '<span style="color:' + (s.left === 0 ? (s.done ? '#7fd8a4' : '#b9b5aa') : s.left > 0 ? '#b9b5aa' : '#ff7a5c') + '">' + (s.left === 0 ? (s.done ? 'Valmis' : 'Tietoja puuttuu') : s.left > 0 ? fmt(s.left) + ' % puuttuu' : fmt(-s.left) + ' % liikaa') + '</span>',
+    bars: D.teosto.map(function (p, i) { return '<span style="width:' + Math.max(0, Math.min(100, num(p.share))) + '%;background:' + TCOL[i % TCOL.length] + '"></span>'; }).join('')
+  };
+}
+function tSummary(p) {
+  var short = p.role === 'Säveltäjä ja sanoittaja' ? 'Säv. & san.' : p.role;
+  var miss = !tRowOk(p) && filled(p.name);
+  return esc(short + (p.publisher === 'Kyllä' ? ' · kustantaja' : '') + (p.teostoClient === 'Kyllä' ? '' : ' · ei Teosto-asiakas')) + (miss ? ' · <span style="color:#e7c33f">tietoja puuttuu</span>' : '');
+}
+function viewTeosto() {
+  var L = teostoLive();
+  var rows = D.teosto.map(function (p, i) {
+    var open = UI.openT === i, b = 'teosto.' + i + '.';
+    var h = '<div class="acc"><button type="button" class="ahd" data-open="T' + i + '" aria-expanded="' + open + '"><span style="width:8px;height:8px;border-radius:50%;background:' + TCOL[i % TCOL.length] + ';flex:none"></span>' +
+      '<span class="t"><b data-live="tn' + i + '">' + esc(p.name || 'Uusi tekijä') + '</b><span data-live="ts' + i + '">' + tSummary(p) + '</span></span>' +
+      '<span class="mono" style="font-size:0.8824rem" data-live="tp' + i + '">' + (filled(p.share) ? esc(p.share) + ' %' : '–') + '</span>' + I.down(open) + '</button>';
+    if (open) {
+      h += '<div class="abody ind"><div class="gs">' + field('Nimi', '', input(b + 'name', p.name, { ph: PH })) + field('Osuus %', '', input(b + 'share', p.share, { num: true, mode: 'decimal', ph: '0', style: 'text-align:right' })) + '</div>' +
+        field('Rooli', '', select(b + 'role', p.role, TEOSTO_ROLES)) +
+        (p.role === 'Sovittaja' ? '<span class="warn">Sovittajan osuus on enintään 16,67 %.</span>' : '') +
+        (p.role === 'Kääntäjä' ? '<span class="hint">Kääntäjä saa osuutensa sanoittajan osuudesta.</span>' : '') +
+        '<div class="q"><span>Teosto-asiakas?</span>' + seg(b + 'teostoClient', p.teostoClient) + '</div>' +
+        (p.teostoClient === 'Kyllä' ? field('Teosto-numero', '', input(b + 'teostoNumber', p.teostoNumber, { num: true, ph: 'Oma Teosto › asiakasnumero', caps: 'none' })) : '<span class="hint" style="margin-top:-6px">Ei haittaa. Osuus kirjataan nimellä, ja Teosto ottaa yhteyttä.</span>') +
+        '<div class="q"><span>Onko kustantaja?</span>' + seg(b + 'publisher', p.publisher) + '</div>' +
+        (p.publisher === 'Kyllä' ? '<div class="gs" style="margin-top:-6px">' + field('Kustantaja', '', input(b + 'publisherName', p.publisherName, { ph: 'Kustantamon nimi' })) + field('Osuus %', '', input(b + 'publisherShare', p.publisherShare, { num: true, mode: 'decimal', ph: '0', style: 'text-align:right' })) + '</div><span class="hint">Yleensä enintään 33,33 % tekijän osuudesta.</span>' : '') +
+        (D.teosto.length > 1 ? '<button type="button" class="lnk" data-del="teosto.' + i + '" style="color:var(--ink-3)">Poista tekijä</button>' : '') + '</div>';
+    }
+    return h + '</div>';
+  }).join('');
+  return formTop(2, COL.teosto) + '<div class="form" style="gap:28px;--c:#3b78e7">' +
+    '<div class="ttl" style="gap:6px"><h2>Tekijäosuudet</h2><p class="sub">Teostoa varten. Kuka teki sävellyksen ja sanat? Osuudet yhteensä 100 %.</p></div>' +
+    '<div class="gd">' + field('Teos', '', input('credits.title', D.credits.title, { caps: 'sentences' })) + field('Kesto', '', input('credits.duration', D.credits.duration, { num: true, ph: '3:12', mode: 'numeric' })) + '</div>' +
+    '<div style="display:flex;flex-direction:column;gap:8px"><div class="tot"><span class="mono" data-live="total">' + L.total + '</span><span style="font-size:0.7647rem" data-live="tstatus">' + L.tstatus + '</span></div>' +
+    '<div class="bars" data-live="bars">' + L.bars + '</div></div>' +
+    '<div class="list" style="display:flex;flex-direction:column">' + rows + '<button type="button" class="add" data-act="addT">' + I.plus + 'Lisää tekijä</button></div>' +
+    '<div style="display:flex;flex-direction:column;gap:12px"><div class="q"><span>Vapaita tai lainattuja osia?</span>' + seg('work.freeParts', D.work.freeParts) + '</div>' +
+    (D.work.freeParts === 'Kyllä' ? field('Mitkä osat?', '', input('work.freePartsWhat', D.work.freePartsWhat, { ph: 'esim. kansanlaulun melodia, sample', caps: 'sentences' })) : '') + '</div>' +
+    '</div>' + ctaLine('Seuraava: Gramex', 'gramex');
+}
+
+function gSum(code) { return D.gramex.reduce(function (t, p) { return t + p.roles.filter(function (r) { return r.role === code; }).reduce(function (a, r) { return a + r.n; }, 0); }, 0); }
+function gSummary(p) { return esc((p.parts || 'Lisää mitä esitti') + (p.gramexClient === 'Kyllä' ? '' : ' · ei Gramex-asiakas')) + (filled(p.name) && !gRowOk(p) ? ' · <span style="color:#e7c33f">tietoja puuttuu</span>' : ''); }
+function viewGramex() {
+  var rows = D.gramex.map(function (p, i) {
+    var open = UI.openG === i, b = 'gramex.' + i + '.', used = p.roles.map(function (r) { return r.role; });
+    var h = '<div class="acc"><button type="button" class="ahd" data-open="G' + i + '" aria-expanded="' + open + '">' +
+      '<span class="t"><b data-live="gn' + i + '">' + esc(p.name || 'Uusi esittäjä') + '</b><span data-live="gs' + i + '">' + gSummary(p) + '</span></span>' +
+      '<span class="mono" style="font-size:0.8235rem;color:var(--ink-2)">' + p.roles.map(function (r) { return r.role + r.n; }).join(' ') + '</span>' + I.down(open) + '</button>';
+    if (open) {
+      h += '<div class="abody">' + field('Nimi', '', input(b + 'name', p.name, { ph: PH })) +
+        field('Mitä esitti', '', input(b + 'parts', p.parts, { ph: 'esim. laulu, kitara', caps: 'none' })) +
+        '<div class="f"><span class="l"><span>Rooli ja osuudet</span><i>1 per soitin tai osa</i></span>' +
+        p.roles.map(function (r, k) {
+          var opts = [['S', 'Solisti (S)'], ['M', 'Muusikko (M)'], ['K', 'Kapellimestari (K)']].filter(function (o) { return o[0] === r.role || used.indexOf(o[0]) < 0; });
+          return '<div class="rrow">' + select(b + 'roles.' + k + '.role', r.role, opts, 'flex:999 1 9rem;width:auto;min-width:0') + select(b + 'roles.' + k + '.n', r.n, ['1', '2', '3', '4', '5', '6'], 'num') +
+            (p.roles.length > 1 ? '<button type="button" class="x" data-del="' + b + 'roles.' + k + '" aria-label="Poista rooli">' + I.x + '</button>' : '') + '</div>';
+        }).join('') +
+        (p.roles.length < 3 ? '<button type="button" class="lnk" data-act="addRole" data-i="' + i + '">+ Myös toisessa roolissa</button>' : '') + '</div>' +
+        (used.indexOf('K') >= 0 ? field('Montako esittäjää johti?', '', select(b + 'conducted', p.conducted, ['4–9', '10 tai enemmän'])) : '') +
+        '<div class="q"><span>Gramex-asiakas?</span>' + seg(b + 'gramexClient', p.gramexClient) + '</div>' +
+        (p.gramexClient === 'Kyllä' ? field('Gramex-numero', '', input(b + 'gramexNumber', p.gramexNumber, { num: true, ph: 'Asiakasnumero', caps: 'none' })) :
+          '<div class="gb" style="margin-top:-6px">' + field('Syntymäaika', '', input(b + 'birthDate', p.birthDate, { type: 'date', caps: 'none' })) +
+          field('Sähköposti', '', input(b + 'email', p.email, { type: 'email', ph: 'nimi@esimerkki.fi', caps: 'none' })) + '</div><span class="hint">Gramex ottaa yhteyttä, jotta korvaukset voidaan maksaa.</span>') +
+        (D.gramex.length > 1 ? '<button type="button" class="lnk" data-del="gramex.' + i + '" style="color:var(--ink-3)">Poista esittäjä</button>' : '') + '</div>';
+    }
+    return h + '</div>';
+  }).join('');
+  var last = D.role === 'artist' ? ['Seuraava: Materiaalit', 'materiaalit'] : ['Valmis', 'home'];
+  return formTop(3, COL.gramex) + '<div class="form" style="gap:28px;--c:#3fae74">' +
+    '<div class="ttl" style="gap:6px"><h2>Esittäjät</h2><p class="sub">Gramexia varten. Kuka laulaa, soittaa tai ohjelmoi äänitteellä?</p>' +
+    '<button type="button" class="lnk" data-act="help" aria-expanded="' + UI.help + '">' + I.info + 'Mitä S, M ja K tarkoittavat?</button>' +
+    (UI.help ? '<div class="help" style="flex-direction:column;gap:8px"><span><b>S, solisti:</b> hallitseva osa, esim. pääartisti tai feat.</span><span><b>M, muusikko:</b> säestys, taustalaulu, ohjelmointi.</span><span><b>K, kapellimestari:</b> johtaa vähintään 4 esittäjää.</span><span>1 osuus per soitin tai osa, enintään 6 per rooli.</span></div>' : '') + '</div>' +
+    '<div class="sums"><span>S <b>' + gSum('S') + '</b></span><span>M <b>' + gSum('M') + '</b></span><span>K <b>' + gSum('K') + '</b></span><span style="margin-left:auto">' + D.gramex.length + ' esittäjää</span></div>' +
+    '<div class="list" style="display:flex;flex-direction:column">' + rows + '<button type="button" class="add" data-act="addG">' + I.plus + 'Lisää esittäjä</button></div>' +
+    '</div>' + ctaLine(last[0], last[1]);
+}
+
+function viewMaterial() {
+  var rows = D.assets.map(function (a) {
+    var ok = a.status === 'valmis' && /^https:\/\//.test(a.url);
+    return '<div class="row" style="cursor:default"><span class="t"><b>' + esc(a.asset) + '</b><span>' + esc(a.note || (ok ? 'Valmis' : 'Tulossa')) + '</span></span>' +
+      (ok ? '<a class="dl" href="' + esc(a.url) + '" target="_blank" rel="noopener">' + I.dl + (/linkki/i.test(a.asset) ? 'Avaa' : 'Lataa') + '</a>' : '<span class="soon">Tulossa</span>') + '</div>';
+  }).join('');
+  return formTop(0) + '<div class="form" style="gap:28px"><div class="ttl" style="gap:6px"><h2>Materiaalit</h2><p class="sub">Julkaisun tiedostot ja linkit. Uudet ilmestyvät tänne, kun ne ovat valmiita.</p></div>' +
+    '<div class="list">' + (rows || '<p class="sub" style="padding:18px 0">Ei vielä materiaaleja.</p>') + '</div>' + (D.role === 'artist' ? calRow() : '') + '</div>';
+}
+
+/* ---------- render ---------- */
+var app = document.getElementById('app');
+function html() {
+  switch (UI.view) {
+    case 'tekijat': return viewTekijat();
+    case 'teosto': return viewTeosto();
+    case 'gramex': return viewGramex();
+    case 'materiaalit': return D.role === 'producer' ? homeProducer() : viewMaterial();
+    default: return D.role === 'label' ? homeLabel() : D.role === 'producer' ? homeProducer() : homeArtist();
+  }
+}
+function render() {
+  var wrap = '<div class="wrap' + (UI.view === 'materiaalit' || (UI.view === 'home' && D.role === 'label') ? ' nocta' : '') + '">' + html() + '</div>';
+  app.innerHTML = wrap + calSheet();
+}
+function live() {
+  var tmp = document.createElement('div');
+  tmp.innerHTML = html();
+  var fresh = {};
+  tmp.querySelectorAll('[data-live]').forEach(function (el) { fresh[el.getAttribute('data-live')] = el.innerHTML; });
+  app.querySelectorAll('[data-live]').forEach(function (el) { var k = el.getAttribute('data-live'); if (k in fresh && el.innerHTML !== fresh[k]) el.innerHTML = fresh[k]; });
+}
+function go(view) {
+  flush();
+  if (['tekijat', 'teosto', 'gramex'].indexOf(UI.view) >= 0) UI.reveal[UI.view] = true;
+  var st = D ? formStates() : null;
+  if (st && st[view] && !st[view].done && st[view].text !== 'Ei aloitettu') UI.reveal[view] = true;
+  if (view === 'teosto') { var ti = D.teosto.findIndex(function (p) { return !tRowOk(p); }); if (ti >= 0) UI.openT = ti; }
+  if (view === 'gramex') { var gi = D.gramex.findIndex(function (p) { return !gRowOk(p); }); if (gi >= 0) UI.openG = gi; }
+  UI.view = view; UI.copiedT = ''; UI.copiedG = '';
+  render();
+  window.scrollTo(0, 0);
+  try { GS.history.push({ v: view }, {}, view === 'home' ? '' : view); } catch (e) {}
+}
+
+/* ---------- state by path ---------- */
+function getRef(path) {
+  var p = path.split('.'), o = D;
+  for (var i = 0; i < p.length - 1; i++) o = o[p[i]];
+  return { o: o, k: p[p.length - 1] };
+}
+function setPath(path, v) { var r = getRef(path); r.o[r.k] = (r.k === 'n') ? +v : v; }
+function sectionOf(path) {
+  var h = path.split('.')[0];
+  if (path === 'credits.duration') return ['credits', 'teosto'];
+  return h === 'credits' || h === 'players' ? ['credits'] : h === 'teosto' || h === 'work' ? ['teosto'] : h === 'gramex' ? ['gramex'] : [];
+}
+
+/* ---------- saving ---------- */
+var timers = {}, dirty = {}, inflight = {};
+function setStatus(s) { UI.status = s; var el = app.querySelector('[data-live="status"]'); if (el) el.textContent = s; var st = document.getElementById('st'); if (st) st.classList.toggle('err', /Ei tallentunut/.test(s)); }
+function queue(secs) { secs.forEach(function (s) { dirty[s] = true; clearTimeout(timers[s]); timers[s] = setTimeout(function () { send(s); }, 700); }); setStatus('Tallentaa…'); }
+function payload(s) {
+  if (s === 'credits') return ['saveCredits', [TOKEN, D.credits, D.players]];
+  if (s === 'teosto') return ['saveTeosto', [TOKEN, D.work, D.teosto, D.credits.duration]];
+  return ['saveGramex', [TOKEN, D.gramex.map(function (p) {
+    var o = { name: p.name, parts: p.parts, S: 0, M: 0, K: 0, conducted: p.roles.some(function (r) { return r.role === 'K'; }) ? p.conducted : '', gramexClient: p.gramexClient, gramexNumber: p.gramexClient === 'Kyllä' ? p.gramexNumber : '', birthDate: p.gramexClient === 'Ei' ? p.birthDate : '', email: p.gramexClient === 'Ei' ? p.email : '' };
+    p.roles.forEach(function (r) { o[r.role] = r.n; });
+    return o;
+  })]];
+}
+function send(s) {
+  clearTimeout(timers[s]);
+  if (!dirty[s]) return;
+  if (inflight[s]) { timers[s] = setTimeout(function () { send(s); }, 400); return; }
+  dirty[s] = false; inflight[s] = true;
+  var p = payload(s);
+  var run = GS.run.withSuccessHandler(function () {
+    inflight[s] = false;
+    if (!Object.keys(dirty).some(function (k) { return dirty[k]; }) && !Object.keys(inflight).some(function (k) { return inflight[k]; })) setStatus('Tallennettu');
+  }).withFailureHandler(function () {
+    inflight[s] = false; dirty[s] = true;
+    setStatus('Ei tallentunut · yritetään uudelleen');
+    timers[s] = setTimeout(function () { send(s); }, 4000);
+  });
+  run[p[0]].apply(run, p[1]);
+}
+function flush() { Object.keys(dirty).forEach(function (s) { if (dirty[s]) send(s); }); }
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flush(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && UI.calOpen) { UI.calOpen = false; render(); } });
+window.addEventListener('pagehide', flush);
+
+/* ---------- events ---------- */
+app.addEventListener('focusout', function (e) {
+  var el = e.target, path = el.getAttribute && el.getAttribute('data-f');
+  if (!path) return;
+  UI.touched[path] = true;
+  var m = isMissing(path, el.value);
+  el.classList.toggle('miss', m); if (m) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+});
+app.addEventListener('input', function (e) {
+  var el = e.target, path = el.getAttribute('data-f');
+  if (!path) return;
+  if (filled(el.value)) { el.classList.remove('miss'); el.removeAttribute('aria-invalid'); }
+  setPath(path, el.value);
+  queue(sectionOf(path));
+  live();
+});
+app.addEventListener('change', function (e) {
+  var el = e.target, path = el.getAttribute('data-sel');
+  if (!path) return;
+  setPath(path, el.value);
+  queue(sectionOf(path));
+  render();
+});
+app.addEventListener('click', function (e) {
+  var b = e.target.closest('button,a');
+  if (!b) { if (e.target.classList && e.target.classList.contains('scrim')) { UI.calOpen = false; render(); } return; }
+  if (!app.contains(b)) return;
+  if (b.hasAttribute('data-cal')) {
+    var choice = b.getAttribute('data-cal');
+    if (choice !== 'file') calStore(choice);
+    setTimeout(function () { UI.calOpen = false; render(); }, 400);
+    return;
+  }
+  var a;
+  if ((a = b.getAttribute('data-go'))) return go(a);
+  if ((a = b.getAttribute('data-set'))) { setPath(a, b.getAttribute('data-v')); queue(sectionOf(a)); return render(); }
+  if ((a = b.getAttribute('data-open'))) {
+    var i = +a.slice(1);
+    if (a[0] === 'T') UI.openT = UI.openT === i ? -1 : i; else UI.openG = UI.openG === i ? -1 : i;
+    return render();
+  }
+  if ((a = b.getAttribute('data-group')) !== null) { UI.openGroup = UI.openGroup === +a ? -1 : +a; return render(); }
+  if ((a = b.getAttribute('data-tick')) !== null) return tick(+a);
+  if ((a = b.getAttribute('data-del'))) {
+    var parts = a.split('.'), idx = +parts.pop();
+    parts.reduce(function (o, k) { return o[k]; }, D).splice(idx, 1);
+    if (parts[0] === 'teosto') UI.openT = -1;
+    queue(sectionOf(a)); return render();
+  }
+  switch (b.getAttribute('data-act')) {
+    case 'addPlayer': D.players.push({ name: '', instrument: '' }); queue(['credits']); render(); focusLast('players.' + (D.players.length - 1) + '.name'); break;
+    case 'addT': D.teosto.push(newT()); UI.openT = D.teosto.length - 1; queue(['teosto']); render(); focusLast('teosto.' + UI.openT + '.name'); break;
+    case 'addG': D.gramex.push(newG()); UI.openG = D.gramex.length - 1; queue(['gramex']); render(); focusLast('gramex.' + UI.openG + '.name'); break;
+    case 'addRole':
+      var p = D.gramex[+b.getAttribute('data-i')], used = p.roles.map(function (r) { return r.role; });
+      p.roles.push({ role: ['S', 'M', 'K'].filter(function (c) { return used.indexOf(c) < 0; })[0] || 'M', n: 1 });
+      queue(['gramex']); render(); break;
+    case 'help': UI.help = !UI.help; render(); break;
+    case 'copyT': copyWriters(); render(); break;
+    case 'copyG': copyPlayers(); render(); break;
+    case 'cal': UI.calOpen = true; render(); var f = app.querySelector('.sheet .opt'); if (f) f.focus(); break;
+    case 'calClose': UI.calOpen = false; render(); break;
+  }
+});
+function focusLast(path) { var el = app.querySelector('[data-f="' + path + '"]'); if (el) el.focus({ preventScroll: false }); }
+
+function copyWriters() {
+  var lyr = names(D.credits.lyricist), comp = names(D.credits.composer), arr = names(D.credits.arranger);
+  var have = D.teosto.map(function (p) { return p.name.trim().toLowerCase(); });
+  var list = [];
+  comp.forEach(function (n) { list.push([n, lyr.indexOf(n) >= 0 ? 'Säveltäjä ja sanoittaja' : 'Säveltäjä']); });
+  lyr.forEach(function (n) { if (comp.indexOf(n) < 0) list.push([n, 'Sanoittaja']); });
+  arr.forEach(function (n) { if (comp.indexOf(n) < 0 && lyr.indexOf(n) < 0) list.push([n, 'Sovittaja']); });
+  var added = 0;
+  D.teosto = D.teosto.filter(function (p) { return filled(p.name) || filled(p.share); });
+  list.forEach(function (x) { if (have.indexOf(x[0].toLowerCase()) < 0) { var t = newT(); t.name = x[0]; t.role = x[1]; D.teosto.push(t); added++; } });
+  if (!D.teosto.length) D.teosto.push(newT());
+  UI.copiedT = !list.length ? 'Täytä ensin San. ja Säv.' : added ? added + (added === 1 ? ' tekijä lisätty' : ' tekijää lisätty') + ' Teosto-osuuksiin' : 'Kirjoittajat ovat jo Teosto-osuuksissa';
+  if (added) { UI.openT = 0; queue(['teosto']); }
+}
+function copyPlayers() {
+  var have = D.gramex.map(function (p) { return p.name.trim().toLowerCase(); }), added = 0;
+  D.gramex = D.gramex.filter(function (p) { return filled(p.name) || filled(p.parts); });
+  D.players.forEach(function (pl) {
+    if (!filled(pl.name)) return;
+    var i = have.indexOf(pl.name.trim().toLowerCase());
+    if (i >= 0) { var g = D.gramex.filter(function (x) { return x.name.trim().toLowerCase() === have[i]; })[0]; if (g && !filled(g.parts)) g.parts = pl.instrument; return; }
+    var n = newG(); n.name = pl.name.trim(); n.parts = pl.instrument.trim(); D.gramex.push(n); have.push(n.name.toLowerCase()); added++;
+  });
+  if (!D.gramex.length) D.gramex.push(newG());
+  UI.copiedG = added ? added + (added === 1 ? ' esittäjä lisätty' : ' esittäjää lisätty') + ' Gramexiin' : D.players.some(function (p) { return filled(p.name); }) ? 'Soittajat ovat jo Gramexissa' : 'Lisää ensin soittajat';
+  if (added) { UI.openG = -1; queue(['gramex']); }
+}
+function tick(i) {
+  var t = D.tasks[i];
+  t.done = !t.done; render();
+  GS.run.withFailureHandler(function () { t.done = !t.done; render(); }).setTask(TOKEN, t.group, t.task, t.done);
+}
+
+/* ---------- boot ---------- */
+function fail(msg) { app.innerHTML = '<div class="center"><div><img class="logo" style="margin:0 auto 20px" src="' + LOGO + '" alt="Laundry"><p style="margin:0;font-size:0.9412rem;color:#f1eee6">' + msg + '</p></div></div>'; }
+if (!TOKEN) fail('Linkki on vajaa. Avaa koko linkki, jonka sait levy-yhtiöltä.');
+else GS.run.withSuccessHandler(function (d) {
+  D = normalize(d);
+  render();
+  try {
+    GS.history.setChangeHandler(function (ev) { UI.view = (ev.state && ev.state.v) || 'home'; flush(); render(); });
+    GS.history.replace({ v: 'home' }, {}, '');
+  } catch (e) {}
+}).withFailureHandler(function (err) {
+  fail(/not_found/.test(String(err && err.message)) ? 'Linkki ei toimi. Pyydä uusi linkki levy-yhtiöltä.' : 'Yhteys katkesi. Lataa sivu uudelleen.');
+}).getRelease(TOKEN);
+</script>
+</body>
+</html>
